@@ -1,0 +1,99 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
+:root {
+  --font-family: "Lato", sans-serif;
+}
+
+body {
+  background-image: url("/src/images/adam-whitlock-I9j8Rk-JYFM-unsplash.jpg");
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: "Numans", sans-serif;
+}
+
+nav {
+  max-width: 1200px;
+}
+
+.max-w-1200 {
+  max-width: 1200px;
+}
+
+.highlighted-event {
+  object-fit: cover;
+  height: 25rem;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.highlighted-event:hover {
+  transform: scale(1.05);
+}
+
+.p-card-title {
+  color: var(--yellow-400);
+  text-transform: uppercase;
+  font-family: var(--font-family);
+}
+
+.p-card {
+  font-family: var(--font-family);
+}
+
+.p-card h1 {
+  font-family: var(--font-family);
+}
+
+.event-image {
+  overflow: none;
+  object-fit: cover;
+  height: 200px;
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+@media only screen and (max-width: 767px) {
+  .highlighted-event {
+    height: 40rem;
+  }
+
+  .highlighted-event img {
+    height: 50%;
+  }
+
+  .highlighted-event div {
+    height: 50%;
+  }
+
+  .hidden-on-mobile {
+    display: none !important;
+  }
+
+  .show-on-mobile {
+    display: inline;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .show-on-mobile {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  body {
+    margin-top: 0;
+  }
+}
