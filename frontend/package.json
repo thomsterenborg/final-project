@@ -12,6 +12,8 @@
     "@chakra-ui/react": "^2.5.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "dotenv": "^16.0.3",
+    "firebase": "^9.19.1",
     "formik": "^2.2.9",
     "framer-motion": "^9.0.2",
     "primeflex": "^3.3.0",

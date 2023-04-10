@@ -22,6 +22,7 @@ export const Navigation = () => {
   const end = (
     <Link className="no-underline" to={"/events"}>
       <h1 className="uppercase text-gray-100 m-0">eventdash.</h1>
+      <small className="text-yellow-700">Firebase version</small>
     </Link>
   );
 
