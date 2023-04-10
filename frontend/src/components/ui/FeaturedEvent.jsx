@@ -4,6 +4,8 @@ import { EventLocation } from "./EventLocation";
 import { EventStartTime } from "./EventStartTime";
 import { EventTitle } from "./EventTitle";
 
+// cSpell:ignore winc, localstorage, primereact, nocheck, eventdash, zoomin
+
 export const FeaturedEvent = ({ title, image, location, startTime }) => {
   return (
     <div className="zoomin animation-duration-100 p-card flex flex-column md:flex-row max-w-1200 w-full md:h-20rem  select-none highlighted-event">
