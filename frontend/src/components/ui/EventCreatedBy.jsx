@@ -24,5 +24,5 @@ export const EventCreatedBy = ({ users, createdBy }) => {
 
 EventCreatedBy.propTypes = {
   users: PropTypes.array.isRequired,
-  createdBy: PropTypes.number.isRequired,
+  createdBy: PropTypes.string.isRequired,
 };

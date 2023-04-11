@@ -9,14 +9,15 @@ import { UserForm } from "../components/UserForm";
 import { useRef, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../js/firebase";
 
 export const loader = async () => {
-  const response = await fetchData("users");
+  const users = [];
+  const usersDocs = await getDocs(collection(db, "users"));
+  usersDocs.forEach((user) => users.push({ ...user.data(), id: user.id }));
 
-  if (!response.ok) {
-    throw new Error("Could not load users");
-  }
-  return { users: await response.json() };
+  return { users: users };
 };
 
 export const Login = () => {

@@ -10,17 +10,16 @@ import { addData, fetchData } from "../js/fetchers";
 import { Toast } from "primereact/toast";
 import { useCurrentUser } from "../contexts/UserContext";
 import { EventFilters } from "../components/EventFilters";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../js/firebase";
 
 export const loader = async () => {
-  const categories = await fetchData("categories");
-
-  if (!categories.ok) {
-    throw new Error(
-      `Failed to load categories. ${categories.status} ${categories.statusText}`
-    );
-  }
-
-  return { categories: await categories.json() };
+  const categories = [];
+  const categoriesDocs = await getDocs(collection(db, "categories"));
+  categoriesDocs.forEach((category) =>
+    categories.push({ ...category.data(), id: category.id })
+  );
+  return { categories: categories };
 };
 
 export const EventsPage = () => {

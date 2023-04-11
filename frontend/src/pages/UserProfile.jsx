@@ -11,36 +11,47 @@ import { EventStartTime } from "../components/ui/EventStartTime";
 import { EventEndTime } from "../components/ui/EventEndTime";
 import { Button } from "primereact/button";
 import { UserForm } from "../components/UserForm";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
+import { db } from "../js/firebase";
 
 export const loader = async ({ params }) => {
   //validate if signed in user and request profile are the same user
   const signedInUser = JSON.parse(localStorage.getItem("currentUser"));
   if (signedInUser.id != params.userId) return redirect("/login");
 
-  const user = await fetchData(`users/${params.userId}`);
-  const events = await fetchData(`events?createdBy=${params.userId}`);
+  //const user = await fetchData(`users/${params.userId}`);
+  //const events = await fetchData(`events?createdBy=${params.userId}`);
 
-  if (!user.ok) {
-    switch (user.status) {
-      case 404:
-        return redirect("/notfound");
+  const userDoc = await getDoc(doc(db, "users", `${params.userId}`));
+  const user = { ...userDoc.data(), id: userDoc.id };
 
-      default:
-        throw new Error(
-          `Failed to load user. ${user.status} ${user.statusText}`
-        );
-    }
-  }
+  const q = query(
+    collection(db, "events"),
+    where("createdBy", "==", `${params.userId}`)
+  );
 
-  if (!events.ok) {
-    throw new Error(
-      `Failed to load categories. ${events.status} ${events.statusText}`
-    );
-  }
+  const eventDocs = await getDocs(q);
+
+  const events = [];
+  eventDocs.forEach((event) => {
+    events.push({
+      ...event.data(),
+      id: event.id,
+      startTime: event.data().startTime.toDate(),
+      endTime: event.data().endTime.toDate(),
+    });
+  });
 
   return {
-    user: await user.json(),
-    events: await events.json(),
+    user: user,
+    events: events,
   };
 };
 

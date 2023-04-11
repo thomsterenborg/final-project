@@ -8,6 +8,8 @@ import PropTypes from "prop-types";
 import { EventListLoading } from "./ui/EventListLoading";
 
 import { Paginator } from "primereact/paginator";
+import { collection, getCountFromServer, getDocs } from "firebase/firestore";
+import { db } from "../js/firebase";
 
 export const EventList = ({ categories }) => {
   const [isLoading, setLoading] = useState(false);
@@ -76,21 +78,33 @@ export const EventList = ({ categories }) => {
       }
 
       //here the data is getting fetched based on users choices
-      const response = await fetchData(
-        `events?${sortOrder}${categoryPart}${searchPart}&_start=${firstEvent}&_limit=6`
+      // const response = await fetchData(
+      //   `events?${sortOrder}${categoryPart}${searchPart}&_start=${firstEvent}&_limit=6`
+      // );
+
+      // if (!response.ok) {
+      //   setLoading(false);
+      //   throw new Error(
+      //     `Failed to load events. ${response.status} ${response.statusText}`
+      //   );
+      // }
+
+      const eventsRef = collection(db, "events");
+      const amountOfEvents = await getCountFromServer(eventsRef);
+
+      const events = [];
+      const eventsDocs = await getDocs(eventsRef);
+      eventsDocs.forEach((event) =>
+        events.push({
+          ...event.data(),
+          id: event.id,
+          startTime: event.data().startTime.toDate(),
+          endTime: event.data().endTime.toDate(),
+        })
       );
 
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(
-          `Failed to load events. ${response.status} ${response.statusText}`
-        );
-      }
-
-      const amountOfEvents = response.headers.get("X-Total-Count");
-
       setTotalEvents(amountOfEvents);
-      handleAvailableEvents(await response.json());
+      handleAvailableEvents(events);
 
       setLoading(false);
     };

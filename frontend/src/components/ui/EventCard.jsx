@@ -60,12 +60,12 @@ export const EventCard = ({
 };
 
 EventCard.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   categoryIds: PropTypes.array.isRequired,
   location: PropTypes.string,
-  startTime: PropTypes.string.isRequired,
-  endTime: PropTypes.string.isRequired,
+  startTime: PropTypes.instanceOf(Date).isRequired,
+  endTime: PropTypes.instanceOf(Date).isRequired,
 };

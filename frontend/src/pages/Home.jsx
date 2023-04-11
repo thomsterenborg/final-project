@@ -8,24 +8,24 @@ import { fetchData } from "../js/fetchers";
 import { useLocalStorage } from "primereact/hooks";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-// import { collection, getDocs } from "firebase/firestore";
-// import { db } from "../js/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "../js/firebase";
 
 export const loader = async () => {
-  const events = await fetchData("events?_sort=startTime&_order=asc");
+  const q = query(collection(db, "events"), orderBy("startTime"));
 
-  if (!events.ok) {
-    throw new Error(
-      `Failed to load events. ${events.status} ${events.statusText}`
-    );
-  }
+  const eventDocs = await getDocs(q);
 
-  // const fireEvents = await getDocs(collection(db, "events"));
-  // fireEvents.forEach((event) => {
-  //   console.log(event.id, "=>", event.data().startTime.toDate().toISOString());
-  // });
+  const events = [];
+  eventDocs.forEach((event) => {
+    events.push({
+      ...event.data(),
+      id: event.id,
+      startTime: event.data().startTime.toDate(),
+    });
+  });
 
-  return { events: await events.json() };
+  return { events: events };
 };
 
 export const Home = () => {

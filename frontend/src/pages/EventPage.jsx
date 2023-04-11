@@ -20,40 +20,35 @@ import { useCurrentUser } from "../contexts/UserContext";
 
 import { Message } from "primereact/message";
 import { classNames } from "primereact/utils";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { db } from "../js/firebase";
 
 export const loader = async ({ params }) => {
-  const event = await fetchData(`events/${params.eventId}`);
-  const users = await fetchData("users");
-  const categories = await fetchData(`categories`);
+  const eventDoc = await getDoc(doc(db, "events", `${params.eventId}`));
 
-  if (!event.ok) {
-    switch (event.status) {
-      case 404:
-        return redirect("/notfound");
+  if (!eventDoc.exists()) return redirect("/notfound");
 
-      default:
-        throw new Error(
-          `Failed to load event. ${event.status} ${event.statusText}`
-        );
-    }
-  }
+  const event = {
+    ...eventDoc.data(),
+    id: eventDoc.id,
+    startTime: eventDoc.data().startTime.toDate(),
+    endTime: eventDoc.data().endTime.toDate(),
+  };
 
-  if (!users.ok) {
-    throw new Error(
-      `Failed to load users. ${users.status} ${users.statusText}`
-    );
-  }
+  const users = [];
+  const usersDocs = await getDocs(collection(db, "users"));
+  usersDocs.forEach((user) => users.push({ ...user.data(), id: user.id }));
 
-  if (!categories.ok) {
-    throw new Error(
-      `Failed to load categories. ${categories.status} ${categories.statusText}`
-    );
-  }
+  const categories = [];
+  const categoriesDocs = await getDocs(collection(db, "categories"));
+  categoriesDocs.forEach((category) =>
+    categories.push({ ...category.data(), id: category.id })
+  );
 
   return {
-    event: await event.json(),
-    users: await users.json(),
-    categories: await categories.json(),
+    event: event,
+    users: users,
+    categories: categories,
   };
 };
 

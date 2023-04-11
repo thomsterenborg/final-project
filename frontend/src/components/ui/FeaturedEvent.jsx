@@ -29,5 +29,5 @@ FeaturedEvent.propTypes = {
   title: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   location: PropTypes.string,
-  startTime: PropTypes.string.isRequired,
+  startTime: PropTypes.instanceOf(Date).isRequired,
 };

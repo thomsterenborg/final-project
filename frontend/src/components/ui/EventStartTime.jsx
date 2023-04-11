@@ -11,5 +11,5 @@ export const EventStartTime = ({ date }) => {
 };
 
 EventStartTime.propTypes = {
-  date: PropTypes.string.isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
 };
