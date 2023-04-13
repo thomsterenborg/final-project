@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from "react";
+import React, { useEffect } from "react";
 import { Menu } from "primereact/menu";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
@@ -17,19 +17,23 @@ export const EventFilters = ({ categories, onClick }) => {
     // @ts-ignore
     selectedCategory,
     handleSelectedCategory,
-    search,
     handleSearch,
     sort,
     handleSort,
     resetFilters,
+    searchInput,
+    handleSearchInput,
   } = useEvents();
+
+  //Debounce search input to prevent unnecessary fetches
+  useEffect(() => {
+    console.log(searchInput);
+    const timeOutId = setTimeout(() => handleSearch(searchInput), 600);
+    return () => clearTimeout(timeOutId);
+  }, [searchInput]);
 
   //sort order item are defined here
   const sortOrders = [
-    {
-      name: "Default",
-      id: `def`,
-    },
     {
       name: "Date ascending",
       id: `dateasc`,
@@ -66,8 +70,8 @@ export const EventFilters = ({ categories, onClick }) => {
                   <InputText
                     className="w-full"
                     placeholder="Search"
-                    value={search}
-                    onChange={(e) => handleSearch(e)}
+                    value={searchInput}
+                    onChange={(e) => handleSearchInput(e.target.value)}
                   />
                 </span>
               </div>
@@ -129,7 +133,7 @@ export const EventFilters = ({ categories, onClick }) => {
 
   return (
     <>
-      <div className="card flex justify-content-start w-full mt-0 ">
+      <div className="card flex justify-content-start w-full mt-0 px-3 md:px-4">
         <Menu model={items} className="w-18rem" popup ref={mobileMenu} />
         <div className="flex justify-content-between w-full">
           <Button
