@@ -75,7 +75,7 @@ export const Home = () => {
         <Dialog
           header="EVENTDASH. | Winc Academy Final Project"
           visible={showWelcome}
-          style={{ width: "50vw" }}
+          style={{ width: "800px" }}
           onHide={() => setShowWelcome(false)}
           footer={dialogFooterContent}
         >

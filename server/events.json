@@ -14,6 +14,11 @@
       "name": "Thom S.",
       "image": "https://thomsterenborg.nl/images/myPicture.jpeg",
       "id": 3
+    },
+    {
+      "name": "GLaDOS",
+      "image": "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b240d0150966011.6303d5a9e6c5b.png",
+      "id": 4
     }
   ],
   "events": [
@@ -150,19 +155,6 @@
     },
     {
       "createdBy": 1,
-      "title": "Fortnite Battle",
-      "description": "Come play Fortnite with us and make become the last one standing!",
-      "image": "https://images.unsplash.com/photo-1589241062272-c0a000072dfa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1548&q=80",
-      "categoryIds": [
-        2
-      ],
-      "location": "Your own home",
-      "startTime": "2023-11-01T12:00:55.345Z",
-      "endTime": "2023-11-01T16:00:55.376Z",
-      "id": 16
-    },
-    {
-      "createdBy": 1,
       "title": "New years party!",
       "description": "Let's celebrate the new year together with some good music and an amazing fireworks show! ",
       "image": "https://images.unsplash.com/photo-1567351344506-b2e8a94e273b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
@@ -173,6 +165,19 @@
       "startTime": "2023-12-31T21:30:43.735Z",
       "endTime": "2024-01-01T01:00:43.763Z",
       "id": 17
+    },
+    {
+      "createdBy": 4,
+      "title": "Important testing",
+      "description": "Hello, do you want to be a subject and help us testing? There will be cake at the end!",
+      "image": "https://assets.reedpopcdn.com/ss_2cdaff5ecff39e8fc22b7ba7fa10e60c799195eb.1920x1080.jpg/BROK/resize/1200x1200%3E/format/jpg/quality/70/ss_2cdaff5ecff39e8fc22b7ba7fa10e60c799195eb.1920x1080.jpg",
+      "categoryIds": [
+        2
+      ],
+      "location": "Aperture Sience Enrichment Center",
+      "startTime": "2023-06-03T08:00:04.420Z",
+      "endTime": "2023-06-04T16:00:04.453Z",
+      "id": 18
     }
   ],
   "categories": [
