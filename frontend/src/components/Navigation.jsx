@@ -26,8 +26,8 @@ export const Navigation = () => {
   );
 
   return (
-    <nav className="flex align-items-center justify-content-center gap-3">
-      <Menubar className="w-screen max-w-100" model={items} end={end} />
+    <nav className="flex align-items-center justify-content-center gap-3 w-full max-w-1200">
+      <Menubar className="w-full" model={items} end={end} />
     </nav>
   );
 };

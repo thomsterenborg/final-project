@@ -36,10 +36,6 @@ export const EventList = ({ categories }) => {
       //building the url for data fetching based on users choiches
       let sortOrder;
       switch (sort) {
-        case "Default":
-          sortOrder = "";
-          break;
-
         case "Date ascending":
           sortOrder = "_sort=startTime&_order=asc";
           break;
@@ -61,7 +57,7 @@ export const EventList = ({ categories }) => {
           break;
 
         default:
-          sortOrder = "Default";
+          sortOrder = "_sort=startTime&_order=asc";
       }
 
       let categoryPart = "";
@@ -99,7 +95,7 @@ export const EventList = ({ categories }) => {
   }, [sort, selectedCategory, search, firstEvent]);
 
   return (
-    <div className="flex flex-column  max-w-1200 w-full">
+    <div className="flex flex-column  max-w-1200 w-full p-3 md:p-0">
       {isLoading ? (
         <div className="card flex flex-wrap gap-4 justify-content-center w-full pt-0">
           <EventListLoading />
@@ -136,7 +132,7 @@ export const EventList = ({ categories }) => {
           rows={6}
           totalRecords={totalEvents}
           onPageChange={onPageChange}
-          className="mt-4 mr-2"
+          className="mt-4"
         />
       </div>
     </div>
