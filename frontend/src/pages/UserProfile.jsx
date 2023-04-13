@@ -151,6 +151,7 @@ export const UserProfile = () => {
               label="Edit profile"
               icon="pi pi-pencil"
               onClick={() => setVisible(true)}
+              disabled={true}
               outlined
             />
             <Button

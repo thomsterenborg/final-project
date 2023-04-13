@@ -8,11 +8,26 @@ import PropTypes from "prop-types";
 import { EventListLoading } from "./ui/EventListLoading";
 
 import { Paginator } from "primereact/paginator";
-import { collection, getCountFromServer, getDocs } from "firebase/firestore";
+import {
+  collection,
+  endAt,
+  getCountFromServer,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  startAfter,
+  startAt,
+  where,
+} from "firebase/firestore";
 import { db } from "../js/firebase";
+import { Button } from "primereact/button";
 
 export const EventList = ({ categories }) => {
   const [isLoading, setLoading] = useState(false);
+  const [isLoadingMore, setLoadingMore] = useState(false);
+  const [loadMore, setLoadMore] = useState(0);
+  const [last, setLast] = useState("");
 
   const {
     availableEvents,
@@ -23,77 +38,78 @@ export const EventList = ({ categories }) => {
   } = useEvents();
 
   //Pagination
-  const [firstEvent, setFirstEvent] = useState(0);
-  const [totalEvents, setTotalEvents] = useState(0);
+  let totalEvents = {};
+  let lastVisible = "";
 
-  const onPageChange = (event) => {
-    setFirstEvent(event.first);
+  const handleLoadMore = () => {
+    setLoadingMore(true);
+    setLoadMore(loadMore + 1);
   };
 
   //fetch events on load and when conditions change
   useEffect(() => {
     const getEvents = async () => {
-      setLoading(true);
+      if (!isLoadingMore) setLoading(true);
 
-      //building the url for data fetching based on users choiches
-      let sortOrder;
+      //building the url for data fetching based on users choices
+
+      let conditions = [];
+      if (search !== "" && sort !== "Name A-z" && sort !== "Name z-A")
+        conditions.push(orderBy("title", "desc"));
+
       switch (sort) {
-        case "Default":
-          sortOrder = "";
-          break;
-
         case "Date ascending":
-          sortOrder = "_sort=startTime&_order=asc";
+          conditions.push(orderBy("startTime"));
           break;
 
         case "Date descending":
-          sortOrder = "_sort=startTime&_order=desc";
+          conditions.push(orderBy("startTime", "desc"));
           break;
 
         case "Name A-z":
-          sortOrder = "_sort=title&_order=asc";
+          conditions.push(orderBy("title"));
           break;
 
         case "Name z-A":
-          sortOrder = "_sort=title&_order=desc";
+          conditions.push(orderBy("title", "desc"));
           break;
 
         case "Category":
-          sortOrder = "_sort=categoryIds&_order=asc";
+          conditions.push(orderBy("categoryIds"));
           break;
 
         default:
-          sortOrder = "Default";
+          break;
       }
 
-      let categoryPart = "";
+      if (search !== "")
+        conditions.push(
+          where("title", ">=", `${search}`),
+          where("title", "<=", `${search}` + "~")
+        );
 
-      if (selectedCategory !== null && selectedCategory !== undefined) {
-        categoryPart = `&categoryIds_like=${selectedCategory.id}`;
-      }
+      if (selectedCategory !== null && selectedCategory !== undefined)
+        conditions.push(
+          where("categoryIds", "array-contains", `${selectedCategory.id}`)
+        );
 
-      let searchPart = "";
-      if (search !== "") {
-        searchPart = `&title_like=${search}`;
-      }
+      if (isLoadingMore) conditions.push(startAfter(last));
 
-      //here the data is getting fetched based on users choices
-      // const response = await fetchData(
-      //   `events?${sortOrder}${categoryPart}${searchPart}&_start=${firstEvent}&_limit=6`
-      // );
+      const q = query(collection(db, "events"), ...conditions, limit(6));
+      const countQ = query(collection(db, "events"), ...conditions);
 
-      // if (!response.ok) {
-      //   setLoading(false);
-      //   throw new Error(
-      //     `Failed to load events. ${response.status} ${response.statusText}`
-      //   );
-      // }
+      const eventCount = await getCountFromServer(countQ);
+      if (!isLoadingMore) totalEvents = eventCount.data().count;
 
-      const eventsRef = collection(db, "events");
-      const amountOfEvents = await getCountFromServer(eventsRef);
+      const events = isLoadingMore ? [...availableEvents] : [];
+      console.log(events);
 
-      const events = [];
-      const eventsDocs = await getDocs(eventsRef);
+      const eventsDocs = await getDocs(q);
+
+      if (!isLoadingMore)
+        setLast(eventsDocs.docs[eventsDocs.docs.length - 1].data().startTime);
+      console.log(last);
+
       eventsDocs.forEach((event) =>
         events.push({
           ...event.data(),
@@ -102,15 +118,31 @@ export const EventList = ({ categories }) => {
           endTime: event.data().endTime.toDate(),
         })
       );
+      console.log(events);
 
-      setTotalEvents(amountOfEvents);
+      // const nextEvents = [];
+
+      // if (isLoadingMore)
+      //   eventsDocs.forEach((event) =>
+      //     nextEvents.push({
+      //       ...event.data(),
+      //       id: event.id,
+      //       startTime: event.data().startTime.toDate(),
+      //       endTime: event.data().endTime.toDate(),
+      //     })
+      //   );
+      // if (isLoadingMore) console.log("next:", nextEvents);
+
       handleAvailableEvents(events);
 
       setLoading(false);
+      setLoadingMore(false);
     };
 
     getEvents();
-  }, [sort, selectedCategory, search, firstEvent]);
+  }, [sort, selectedCategory, search, loadMore]);
+
+  const hasMoreEvents = totalEvents < availableEvents;
 
   return (
     <div className="flex flex-column  max-w-1200 w-full">
@@ -145,12 +177,9 @@ export const EventList = ({ categories }) => {
         </>
       )}
       <div className="card">
-        <Paginator
-          first={firstEvent}
-          rows={6}
-          totalRecords={totalEvents}
-          onPageChange={onPageChange}
-          className="mt-4 mr-2"
+        <Button
+          label={hasMoreEvents ? "Load more" : "No more events"}
+          onClick={() => handleLoadMore()}
         />
       </div>
     </div>

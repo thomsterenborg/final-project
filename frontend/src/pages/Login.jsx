@@ -93,6 +93,7 @@ export const Login = () => {
           <Button
             label="Create a new one"
             onClick={() => setVisible(true)}
+            disabled={true}
             outlined
           />
         </div>

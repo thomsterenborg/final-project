@@ -161,7 +161,7 @@ export const EventPage = () => {
                   rounded
                   text
                   onClick={() => setVisible(true)}
-                  disabled={!currentUser}
+                  disabled={true}
                 />
                 <Toast ref={toast} />
                 <ConfirmPopup />
@@ -169,15 +169,15 @@ export const EventPage = () => {
                   icon="pi pi-trash"
                   severity="danger"
                   onClick={handleDelete}
-                  disabled={!currentUser}
+                  disabled={true}
                   rounded
                   text
                 />
               </div>
-              <div className={classNames({ "p-hidden": currentUser })}>
+              <div className={classNames({ "p-hidden": false })}>
                 <Message
                   severity="warn"
-                  text="You have to login to edit or delete events"
+                  text="Deleting and editing is not available in Live Preview"
                 />
               </div>
             </div>

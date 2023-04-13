@@ -7,20 +7,21 @@ export const EventContext = createContext({});
 EventContext.displayName = "EventContext";
 
 export const EventContextProvider = ({ children }) => {
-  const [availableEvents, setAvaiblabeEvents] = useState([]);
+  const [availableEvents, setAvailableEvents] = useState([]);
   const [selectedCategory, setSelectedCategory] = useSessionStorage(
     null,
     "selectedCategory"
   );
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useSessionStorage("Default", "sort");
+  const [sort, setSort] = useSessionStorage("Date ascending", "sort");
+  const [searchInput, setSearchInput] = useState("");
 
   const handleSort = (e) => {
     setSort(e.target.value);
   };
 
   const handleSearch = (e) => {
-    setSearch(e.target.value);
+    setSearch(e);
   };
 
   const handleSelectedCategory = (e) => {
@@ -28,13 +29,18 @@ export const EventContextProvider = ({ children }) => {
   };
 
   const handleAvailableEvents = (param) => {
-    setAvaiblabeEvents(param);
+    setAvailableEvents(param);
+  };
+
+  const handleSearchInput = (e) => {
+    setSearchInput(e);
   };
 
   const resetFilters = () => {
-    setSort("Default");
+    setSort("Date ascending");
     setSearch("");
     setSelectedCategory(null);
+    setSearchInput("");
   };
   return (
     <EventContext.Provider
@@ -43,10 +49,12 @@ export const EventContextProvider = ({ children }) => {
         selectedCategory,
         search,
         sort,
+        searchInput,
         handleSort,
         handleSearch,
         handleSelectedCategory,
         handleAvailableEvents,
+        handleSearchInput,
         resetFilters,
       }}
     >
