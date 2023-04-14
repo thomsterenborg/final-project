@@ -45,17 +45,6 @@ export const EventCard = ({
         <EventStartTime date={startTime} />
         <EventEndTime date={endTime} />
         <EventCategories categories={categories} categoryIds={categoryIds} />
-
-        {/* <div className="flex gap-1 justify-content-end mt-2">
-          <Button
-            label="To event"
-            severity="info"
-            icon="pi pi-arrow-right"
-            iconPos="right"
-            size="small"
-            raised
-          />
-        </div> */}
       </Card>
     </Link>
   );
