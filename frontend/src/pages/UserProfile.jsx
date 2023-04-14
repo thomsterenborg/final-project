@@ -15,7 +15,8 @@ import { UserForm } from "../components/UserForm";
 export const loader = async ({ params }) => {
   //validate if signed in user and request profile are the same user
   const signedInUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (signedInUser.id != params.userId) return redirect("/login");
+  if (!signedInUser || signedInUser.id != params.userId)
+    return redirect("/login");
 
   const user = await fetchData(`users/${params.userId}`);
   const events = await fetchData(`events?createdBy=${params.userId}`);

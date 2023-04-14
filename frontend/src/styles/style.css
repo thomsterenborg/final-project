@@ -64,6 +64,10 @@ nav {
   border-radius: 50%;
 }
 
+.p-tooltip {
+  max-width: 16rem;
+}
+
 @media only screen and (max-width: 767px) {
   .highlighted-event {
     height: 40rem;
