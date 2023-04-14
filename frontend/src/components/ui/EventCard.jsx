@@ -19,34 +19,34 @@ export const EventCard = ({
   categories,
 }) => {
   return (
-    <Card
-      title={`${title}.`}
-      subTitle={description}
-      className="zoomin animation-duration-100 md:max-w-23rem w-full h-fit"
-    >
-      <img
-        width="100%"
-        height="220px"
-        src={image}
-        alt="Event image"
-        className="object-fit-cover border-round"
-      />
-
-      {new Date(startTime) < new Date() ? (
-        <Message
-          severity="warn"
-          text="You've missed this event!"
-          style={{ height: "2rem" }}
-          className="mt-2 w-full"
+    <Link className="no-underline" to={`/event/${id}`}>
+      <Card
+        title={`${title}.`}
+        subTitle={description}
+        className="zoomin animation-duration-100 md:max-w-23rem w-full h-fit shadow-6 event-card"
+      >
+        <img
+          width="100%"
+          height="220px"
+          src={image}
+          alt="Event image"
+          className="object-fit-cover border-round"
         />
-      ) : null}
 
-      <EventStartTime date={startTime} />
-      <EventEndTime date={endTime} />
-      <EventCategories categories={categories} categoryIds={categoryIds} />
+        {new Date(startTime) < new Date() ? (
+          <Message
+            severity="warn"
+            text="You've missed this event!"
+            style={{ height: "2rem" }}
+            className="mt-2 w-full"
+          />
+        ) : null}
 
-      <div className="flex gap-1 justify-content-end mt-2">
-        <Link className="no-underline" to={`/event/${id}`}>
+        <EventStartTime date={startTime} />
+        <EventEndTime date={endTime} />
+        <EventCategories categories={categories} categoryIds={categoryIds} />
+
+        {/* <div className="flex gap-1 justify-content-end mt-2">
           <Button
             label="To event"
             severity="info"
@@ -55,9 +55,9 @@ export const EventCard = ({
             size="small"
             raised
           />
-        </Link>
-      </div>
-    </Card>
+        </div> */}
+      </Card>
+    </Link>
   );
 };
 

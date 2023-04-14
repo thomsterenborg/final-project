@@ -30,7 +30,7 @@ nav {
 }
 
 .highlighted-event:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .p-card-title {
@@ -66,6 +66,10 @@ nav {
 
 .p-tooltip {
   max-width: 16rem;
+}
+
+.event-card:hover {
+  transform: scale(1.03);
 }
 
 @media only screen and (max-width: 767px) {
