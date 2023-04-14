@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Card } from "primereact/card";
-import { Button } from "primereact/button";
 import { Link } from "react-router-dom";
 import { Message } from "primereact/message";
 import { EventStartTime } from "./EventStartTime";

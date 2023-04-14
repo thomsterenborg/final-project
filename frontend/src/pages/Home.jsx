@@ -40,7 +40,7 @@ export const Home = () => {
   const nextEvent = events.find(
     (event) => new Date() <= new Date(event.startTime) //gets the first item in from events that older than today.
   );
-  const randomEvent = events[Math.floor(Math.random() * events.length)];
+  const randomEvent = events[Math.floor(Math.random() * events.length)]; //gets random event to show as featured
 
   return (
     <>

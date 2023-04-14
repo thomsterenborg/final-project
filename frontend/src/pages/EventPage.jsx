@@ -17,7 +17,6 @@ import { EventLocation } from "../components/ui/EventLocation";
 import { EventCategories } from "../components/ui/EventCategories";
 import { EventImage } from "../components/ui/EventImage";
 import { useCurrentUser } from "../contexts/UserContext";
-
 import { Message } from "primereact/message";
 import { classNames } from "primereact/utils";
 
@@ -26,6 +25,7 @@ export const loader = async ({ params }) => {
   const users = await fetchData("users");
   const categories = await fetchData(`categories`);
 
+  //check for error status and redirect if it's 404
   if (!event.ok) {
     switch (event.status) {
       case 404:
@@ -65,8 +65,9 @@ export const EventPage = () => {
 
   const navigate = useNavigate();
 
-  const toast = useRef(null);
+  const toast = useRef(null); //ref for showing Toast
 
+  //actions taken when users confirms deletion of event
   const accept = async () => {
     const response = await deleteData(`events/${event.id}`);
 
@@ -75,7 +76,8 @@ export const EventPage = () => {
       toast.current.show({
         severity: "success",
         summary: "Event deleted",
-        detail: "The event has succesfully been deleted",
+        detail:
+          "The event has successfully been deleted. You will be redirected to the Events page",
         life: 5000,
       });
       setTimeout(() => navigate("/events"), 3000);
@@ -91,6 +93,7 @@ export const EventPage = () => {
     }
   };
 
+  //actions taken when users cancels deletion of event
   const reject = () => {
     toast.current.show({
       severity: "error",
@@ -100,6 +103,7 @@ export const EventPage = () => {
     });
   };
 
+  //Delete button popover
   const handleDelete = (e) => {
     confirmPopup({
       target: e.currentTarget,
@@ -111,6 +115,7 @@ export const EventPage = () => {
     });
   };
 
+  //Initial values for event edit form
   const initialValues = {
     createdBy: event.createdBy,
     title: event.title,
@@ -122,6 +127,7 @@ export const EventPage = () => {
     endTime: new Date(event.endTime),
   };
 
+  //action taken when form is saved
   const submitForm = async (values) => {
     setSavingForm(true);
     const response = await updateData(`events/${event.id}`, values);

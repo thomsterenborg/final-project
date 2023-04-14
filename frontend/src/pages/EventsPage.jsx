@@ -34,7 +34,7 @@ export const EventsPage = () => {
   let userid = 0;
   if (currentUser) userid = currentUser.id;
 
-  //intitial values for Add event form
+  //Initial values for add event form
   const initialValues = {
     createdBy: userid,
     title: "",
@@ -46,7 +46,7 @@ export const EventsPage = () => {
     endTime: "",
   };
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); //used for redirection
 
   const [savingForm, setSavingForm] = useState(false);
 
@@ -104,9 +104,7 @@ export const EventsPage = () => {
             style={{ width: "600px" }}
             onHide={() => setVisible(false)}
           >
-            {/* Form starts here */}
             <Toast ref={toast} />
-
             <EventForm
               initialValues={initialValues}
               categories={categories}

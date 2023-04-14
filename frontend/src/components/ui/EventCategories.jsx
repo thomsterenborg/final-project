@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Tag } from "primereact/tag";
 
 export const EventCategories = ({ categories, categoryIds }) => {
-  //generetates eveent tags for every catecory of a event
+  //generates event tags for every category of a event
   return (
     <div className="flex gap-2">
       {categories.map((category) =>
@@ -20,7 +20,7 @@ export const EventCategories = ({ categories, categoryIds }) => {
   );
 };
 
-EventCategories.poropTypes = {
+EventCategories.propTypes = {
   categories: PropTypes.array.isRequired,
   categoryIds: PropTypes.array.isRequired,
 };
