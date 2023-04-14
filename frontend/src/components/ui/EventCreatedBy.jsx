@@ -6,7 +6,7 @@ export const EventCreatedBy = ({ users, createdBy }) => {
   //gets the name of the user who created the event.
 
   return (
-    <h4 className="p-card-subtitle mt-6">
+    <h4 className="p-card-subtitle mt-4">
       <span className="text-yellow-500">Create by: </span>
       {users.map((user) =>
         user.id === createdBy ? (
