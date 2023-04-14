@@ -156,11 +156,17 @@ export const EventPage = () => {
         EVENT.
       </h1>
 
-      <div className="p-card p-4 flex flex-column max-w-1200 h-fit">
-        <div className="flex h-full flex-column md:flex-row">
-          <div className="w-8">
+      <div className="p-card p-4 flex flex-column w-full max-w-1200 h-fit">
+        <div className="flex h-full flex-column md:flex-row w-full">
+          <div className="w-full md:w-8">
             <div className="flex flex-column w-full">
               <div className="flex gap-1">
+                <Button
+                  icon="pi pi-arrow-left"
+                  rounded
+                  text
+                  onClick={() => navigate(-1)}
+                />
                 <Button
                   icon="pi pi-pencil"
                   rounded
@@ -179,7 +185,13 @@ export const EventPage = () => {
                   text
                 />
               </div>
-              <div className={classNames({ "p-hidden": currentUser })}>
+              <div
+                className={classNames({
+                  "p-hidden": currentUser,
+                  "mt-3": true,
+                  "w-full": true,
+                })}
+              >
                 <Message
                   severity="warn"
                   text="You have to login to edit or delete events"
