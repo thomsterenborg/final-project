@@ -2,22 +2,18 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useEvents } from "../contexts/EventContext";
-import { fetchData } from "../js/fetchers";
 import { EventCard } from "./ui/EventCard";
 import PropTypes from "prop-types";
 import { EventListLoading } from "./ui/EventListLoading";
 
-import { Paginator } from "primereact/paginator";
 import {
   collection,
-  endAt,
   getCountFromServer,
   getDocs,
   limit,
   orderBy,
   query,
   startAfter,
-  startAt,
   where,
 } from "firebase/firestore";
 import { db } from "../js/firebase";
@@ -48,11 +44,11 @@ export const EventList = ({ categories }) => {
     const getEvents = async () => {
       if (!isLoadingMore) setLoading(true);
 
-      //building the url for data fetching based on users choices
+      //building the query for fetching based on users choices
 
       let conditions = [];
-      if (search !== "" && sort !== "Name A-z" && sort !== "Name z-A")
-        conditions.push(orderBy("title", "desc"));
+      // if (search !== "" && sort !== "Name A-z" && sort !== "Name z-A")
+      //   conditions.push(orderBy("title"));
 
       switch (sort) {
         case "Date ascending":
@@ -76,19 +72,23 @@ export const EventList = ({ categories }) => {
           break;
 
         default:
+          conditions.push(orderBy("startTime"));
           break;
       }
 
-      if (search !== "")
-        conditions.push(
-          where("title", ">=", `${search}`),
-          where("title", "<=", `${search}` + "~")
-        );
+      // if (search !== "")
+      //   conditions.push(
+      //     where("title", ">=", `${search}`),
+      //     where("title", "<=", `${search}` + "~")
+      //   );
 
       if (selectedCategory !== null && selectedCategory !== undefined)
         conditions.push(
           where("categoryIds", "array-contains", `${selectedCategory.id}`)
         );
+      console.log(search);
+      if (search.length > 0)
+        conditions.push(where("keywords", "array-contains-any", search));
 
       if (isLoadingMore) conditions.push(startAfter(last));
 
@@ -119,9 +119,6 @@ export const EventList = ({ categories }) => {
       }
 
       handleAvailableEvents(events);
-
-      console.log(totalEvents, events.length, availableEvents.length);
-
       setLoading(false);
       setLoadingMore(false);
     };

@@ -30,7 +30,7 @@ export const EventForm = ({
       .url("Provide a valid URL")
       .required("Image is required"),
     categoryIds: Yup.array()
-      .of(Yup.number("No valid number"))
+      .of(Yup.string("No valid string"))
       .min(1, "Select at least 1 category")
       .required("This field is required"),
     location: Yup.string()

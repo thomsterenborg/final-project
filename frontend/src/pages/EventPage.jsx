@@ -20,7 +20,14 @@ import { useCurrentUser } from "../contexts/UserContext";
 
 import { Message } from "primereact/message";
 import { classNames } from "primereact/utils";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  Timestamp,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../js/firebase";
 
 export const loader = async ({ params }) => {
@@ -119,30 +126,45 @@ export const EventPage = () => {
 
   const submitForm = async (values) => {
     setSavingForm(true);
-    const response = await updateData(`events/${event.id}`, values);
+    //const response = await updateData(`events/${event.id}`, values);
 
-    if (response.ok) {
-      toast.current.show({
-        severity: "success",
-        summary: "Event updated",
-        detail: "The event has succesfully been updated",
-        life: 5000,
-      });
-      setVisible(false);
-      setSavingForm(false);
-      navigate(`/event/${event.id}`);
-    }
+    const eventData = {
+      createdBy: values.createdBy,
+      title: values.title.toLocaleLowerCase(),
+      keywords: values.title.split(" "),
+      description: values.description,
+      image: values.image,
+      categoryIds: values.categoryIds,
+      location: values.location,
+      startTime: Timestamp.fromDate(new Date(values.startTime)),
+      endTime: Timestamp.fromDate(new Date(values.endTime)),
+    };
 
-    if (!response.ok) {
-      toast.current.show({
-        severity: "error",
-        summary: "Event not updatet",
-        detail: `Event could not be updatet (${response.status} ${response.statusText})`,
-        life: 5000,
+    await setDoc(doc(db, "events", `${event.id}`), eventData)
+      .then(() => {
+        //show success message
+        toast.current.show({
+          severity: "success",
+          summary: "Event updated",
+          detail: "The event has successfully been updated",
+          life: 5000,
+        });
+        setVisible(false);
+        setSavingForm(false);
+        navigate(`/event/${event.id}`);
+      })
+      .catch((error) => {
+        //show error message to user
+        toast.current.show({
+          severity: "error",
+          summary: "Event not updated",
+          detail: `Editing events has been disabled in Live Preview: ${error})`,
+          life: 9000,
+        });
+
+        setVisible(false);
+        setSavingForm(false);
       });
-      setVisible(false);
-      setSavingForm(false);
-    }
   };
 
   return (
@@ -161,7 +183,7 @@ export const EventPage = () => {
                   rounded
                   text
                   onClick={() => setVisible(true)}
-                  disabled={true}
+                  disabled={!currentUser}
                 />
                 <Toast ref={toast} />
                 <ConfirmPopup />

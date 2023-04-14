@@ -12,7 +12,7 @@ export const EventContextProvider = ({ children }) => {
     null,
     "selectedCategory"
   );
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState([]);
   const [sort, setSort] = useSessionStorage("Date ascending", "sort");
   const [searchInput, setSearchInput] = useState("");
 
@@ -21,7 +21,9 @@ export const EventContextProvider = ({ children }) => {
   };
 
   const handleSearch = (e) => {
-    setSearch(e);
+    if (e.length < 1 && search.length > 0) setSearch([]);
+    if (e.length < 1) return;
+    setSearch(e.split(" "));
   };
 
   const handleSelectedCategory = (e) => {
@@ -38,7 +40,7 @@ export const EventContextProvider = ({ children }) => {
 
   const resetFilters = () => {
     setSort("Date ascending");
-    setSearch("");
+    setSearch([]);
     setSelectedCategory(null);
     setSearchInput("");
   };
