@@ -19,7 +19,7 @@ export const EventCard = ({
   categories,
 }) => {
   return (
-    <Link className="no-underline" to={`/event/${id}`}>
+    <Link className="no-underline w-full md:max-w-23rem" to={`/event/${id}`}>
       <Card
         title={`${title}.`}
         subTitle={description}
