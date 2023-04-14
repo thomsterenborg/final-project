@@ -22,7 +22,7 @@ export const EventCard = ({
     <Card
       title={`${title}.`}
       subTitle={description}
-      className="zoomin animation-duration-100 md:max-w-23rem w-full"
+      className="zoomin animation-duration-100 md:max-w-23rem w-full h-fit"
     >
       <img
         width="100%"
@@ -36,7 +36,7 @@ export const EventCard = ({
           severity="warn"
           text="You've missed this event!"
           style={{ height: "2rem" }}
-          className="mt-2"
+          className="mt-2 w-full"
         />
       ) : null}
       <EventStartTime date={startTime} />

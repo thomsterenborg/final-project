@@ -27,17 +27,15 @@ export const EventFilters = ({ categories, onClick }) => {
   } = useEvents();
 
   useEffect(() => {
-    console.log(searchInput);
-    const timeOutId = setTimeout(() => handleSearch(searchInput), 3000);
+    const timeOutId = setTimeout(
+      () => handleSearch(searchInput.toLocaleLowerCase()),
+      600
+    );
     return () => clearTimeout(timeOutId);
   }, [searchInput]);
 
   //sort order item are defined here
   const sortOrders = [
-    // {
-    //   name: "Default",
-    //   id: `def`,
-    // },
     {
       name: "Date ascending",
       id: `dateasc`,
@@ -137,7 +135,7 @@ export const EventFilters = ({ categories, onClick }) => {
 
   return (
     <>
-      <div className="card flex justify-content-start w-full mt-0 ">
+      <div className="card flex justify-content-start w-full mt-0 px-3 md:px-4">
         <Menu model={items} className="w-18rem" popup ref={mobileMenu} />
         <div className="flex justify-content-between w-full">
           <Button
@@ -152,7 +150,7 @@ export const EventFilters = ({ categories, onClick }) => {
             icon="pi pi-plus"
             onClick={() => onClick(true)}
             disabled={true}
-            tooltip={!currentUser ? "You have to log in to add an event" : null}
+            tooltip={"Adding events is disabled in Live Preview"}
             tooltipOptions={{
               position: "bottom",
               mouseTrack: true,

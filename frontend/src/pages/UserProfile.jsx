@@ -26,9 +26,6 @@ export const loader = async ({ params }) => {
   const signedInUser = JSON.parse(localStorage.getItem("currentUser"));
   if (signedInUser.id != params.userId) return redirect("/login");
 
-  //const user = await fetchData(`users/${params.userId}`);
-  //const events = await fetchData(`events?createdBy=${params.userId}`);
-
   const userDoc = await getDoc(doc(db, "users", `${params.userId}`));
   const user = { ...userDoc.data(), id: userDoc.id };
 
@@ -152,6 +149,13 @@ export const UserProfile = () => {
               icon="pi pi-pencil"
               onClick={() => setVisible(true)}
               disabled={true}
+              tooltip={"Adding events is disabled in Live Preview"}
+              tooltipOptions={{
+                position: "bottom",
+                mouseTrack: true,
+                mouseTrackTop: 15,
+                showOnDisabled: true,
+              }}
               outlined
             />
             <Button

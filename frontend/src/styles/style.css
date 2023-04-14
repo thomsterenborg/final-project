@@ -8,6 +8,7 @@ body {
   background-image: url("/src/images/adam-whitlock-I9j8Rk-JYFM-unsplash.jpg");
   background-attachment: fixed;
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   font-family: "Numans", sans-serif;
 }
@@ -94,6 +95,6 @@ nav {
 
 @media only screen and (max-width: 960px) {
   body {
-    margin-top: 0;
+    margin: 0;
   }
 }

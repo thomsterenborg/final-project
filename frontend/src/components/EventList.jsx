@@ -28,6 +28,7 @@ export const EventList = ({ categories }) => {
   const [isLoadingMore, setLoadingMore] = useState(false);
   const [loadMore, setLoadMore] = useState(0);
   const [last, setLast] = useState("");
+  const [totalEvents, setTotalEvents] = useState(0);
 
   const {
     availableEvents,
@@ -36,10 +37,6 @@ export const EventList = ({ categories }) => {
     selectedCategory,
     handleAvailableEvents,
   } = useEvents();
-
-  //Pagination
-  let totalEvents = {};
-  let lastVisible = "";
 
   const handleLoadMore = () => {
     setLoadingMore(true);
@@ -98,42 +95,32 @@ export const EventList = ({ categories }) => {
       const q = query(collection(db, "events"), ...conditions, limit(6));
       const countQ = query(collection(db, "events"), ...conditions);
 
-      const eventCount = await getCountFromServer(countQ);
-      if (!isLoadingMore) totalEvents = eventCount.data().count;
+      if (!isLoadingMore) {
+        const eventCount = await getCountFromServer(countQ);
+        setTotalEvents(eventCount.data().count);
+      }
 
       const events = isLoadingMore ? [...availableEvents] : [];
-      console.log(events);
 
       const eventsDocs = await getDocs(q);
 
-      if (!isLoadingMore)
+      if (!eventsDocs.empty)
         setLast(eventsDocs.docs[eventsDocs.docs.length - 1].data().startTime);
-      console.log(last);
 
-      eventsDocs.forEach((event) =>
-        events.push({
-          ...event.data(),
-          id: event.id,
-          startTime: event.data().startTime.toDate(),
-          endTime: event.data().endTime.toDate(),
-        })
-      );
-      console.log(events);
-
-      // const nextEvents = [];
-
-      // if (isLoadingMore)
-      //   eventsDocs.forEach((event) =>
-      //     nextEvents.push({
-      //       ...event.data(),
-      //       id: event.id,
-      //       startTime: event.data().startTime.toDate(),
-      //       endTime: event.data().endTime.toDate(),
-      //     })
-      //   );
-      // if (isLoadingMore) console.log("next:", nextEvents);
+      if (!eventsDocs.empty) {
+        eventsDocs.forEach((event) =>
+          events.push({
+            ...event.data(),
+            id: event.id,
+            startTime: event.data().startTime.toDate(),
+            endTime: event.data().endTime.toDate(),
+          })
+        );
+      }
 
       handleAvailableEvents(events);
+
+      console.log(totalEvents, events.length, availableEvents.length);
 
       setLoading(false);
       setLoadingMore(false);
@@ -142,10 +129,10 @@ export const EventList = ({ categories }) => {
     getEvents();
   }, [sort, selectedCategory, search, loadMore]);
 
-  const hasMoreEvents = totalEvents < availableEvents;
+  const hasMoreEvents = availableEvents.length < totalEvents;
 
   return (
-    <div className="flex flex-column  max-w-1200 w-full">
+    <div className="flex flex-column gap-4 justify-content-center align-items-center max-w-1200 w-full p-3 md:p-0">
       {isLoading ? (
         <div className="card flex flex-wrap gap-4 justify-content-center w-full pt-0">
           <EventListLoading />
@@ -153,21 +140,39 @@ export const EventList = ({ categories }) => {
       ) : (
         <>
           {availableEvents.length > 0 ? (
-            <div className="card flex flex-wrap gap-4 justify-content-center w-full pt-0">
-              {availableEvents.map((event) => (
-                <EventCard
-                  key={event.id}
-                  id={event.id}
-                  title={event.title}
-                  description={event.description}
-                  image={event.image}
-                  startTime={event.startTime}
-                  endTime={event.endTime}
-                  categoryIds={event.categoryIds}
-                  categories={categories}
+            <>
+              <div className="card flex flex-wrap gap-4 justify-content-center w-full pt-0">
+                {availableEvents.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    id={event.id}
+                    title={event.title}
+                    description={event.description}
+                    image={event.image}
+                    startTime={event.startTime}
+                    endTime={event.endTime}
+                    categoryIds={event.categoryIds}
+                    categories={categories}
+                  />
+                ))}
+              </div>
+              <div className="card text-center mb-4">
+                <Button
+                  label={
+                    isLoadingMore
+                      ? "Loading..."
+                      : hasMoreEvents
+                      ? `Load more (now showing ${availableEvents.length} of ${totalEvents})`
+                      : "Showing all events"
+                  }
+                  icon={hasMoreEvents ? "pi pi-chevron-down" : "pi pi-check"}
+                  onClick={() => handleLoadMore()}
+                  disabled={!hasMoreEvents}
+                  loading={isLoadingMore}
+                  raised
                 />
-              ))}
-            </div>
+              </div>
+            </>
           ) : (
             <div className="p-card flex flex-column justify-content-center align-items-center w-full">
               <h1 className="text-yellow-400 text-4xl">No events found</h1>
@@ -176,12 +181,6 @@ export const EventList = ({ categories }) => {
           )}
         </>
       )}
-      <div className="card">
-        <Button
-          label={hasMoreEvents ? "Load more" : "No more events"}
-          onClick={() => handleLoadMore()}
-        />
-      </div>
     </div>
   );
 };

@@ -177,7 +177,7 @@ export const EventPage = () => {
               <div className={classNames({ "p-hidden": false })}>
                 <Message
                   severity="warn"
-                  text="Deleting and editing is not available in Live Preview"
+                  text="Deleting and editing events is disabled in Live Preview"
                 />
               </div>
             </div>

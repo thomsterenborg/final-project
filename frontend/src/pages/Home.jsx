@@ -51,7 +51,7 @@ export const Home = () => {
 
   return (
     <>
-      <div className="flex flex-column align-items-center justify-content-center w-full h-full max-w-1200">
+      <div className="flex flex-column align-items-center justify-content-center w-full h-full max-w-1200 px-3 lg:px-0">
         <div className="flex justify-content-start flex-column w-full">
           <h1 className="mt-4 mb-0 text-gray-600">Welcome to</h1>
           <h1 className="text-6xl md:text-8xl text-gray-900 m-0">EVENTDASH.</h1>
@@ -82,17 +82,46 @@ export const Home = () => {
         <Dialog
           header="EVENTDASH. | Winc Academy Final Project"
           visible={showWelcome}
-          style={{ width: "50vw" }}
+          style={{ width: "800px" }}
           onHide={() => setShowWelcome(false)}
           footer={dialogFooterContent}
         >
           <h1 className="p-card-title">Welcome.</h1>
           <p>
-            Thank you for checking out my final project for the Winc Academy
-            Front-end Development course. In this popup I will explain what the
-            assessment was, what I did extra and what choices I made. If you're
-            not interested in that, just close this popup and you will not see
-            it again until you clear the browsers localStorage.
+            Thank you for checking out this special "Firebase version" of my
+            final project for the Winc Academy Front-end Development course. In
+            this popup I will explain what the assessment was, what I did extra
+            and what choices I made. If you're not interested in that, just
+            close this popup and you will not see it again until you clear the
+            browsers localStorage.
+          </p>
+          <h1 className="p-card-title">firebase version.</h1>
+          <p>
+            This is de firebase version of my final project for Winc Academy.
+            It's almost the same app as the original version, with a few
+            differences:
+            <ul>
+              <li className="mb-2">
+                Database is a Cloud Firestore database instead of JSON Server
+              </li>
+              <li className="mb-2">
+                Firestore does not support Full-text search without the use of
+                expensive third party applications. The search function on the
+                Events page does work, but is a bit limited. For example: If
+                your want to search the Ford Rally event, you can search fo,
+                ford, ford r, etc. as long as you start with the beginning of
+                the title of the event, but you can't search for "rally".
+              </li>
+              <li className="mb-2">
+                Pagination options are limited in Firestore. Because of this
+                limitation this version uses infinite scrolling in stead of the
+                "Paginator" used in the JSON Server version.
+              </li>
+              <li>
+                Writing to the database has been disabled, so adding, deleting
+                and updating events and accounts has been disabled
+              </li>
+            </ul>
           </p>
           <h1 className="p-card-title">The Assessment.</h1>
           <p>

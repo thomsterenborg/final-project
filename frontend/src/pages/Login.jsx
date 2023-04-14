@@ -77,8 +77,20 @@ export const Login = () => {
           <Button
             key={user.id}
             value={user}
-            className="w-full"
+            className="w-20rem"
             onClick={() => handleCurrentUser(user)}
+            disabled={user.name === "GLaDOS"}
+            tooltip={
+              user.name === "GLaDOS"
+                ? "THE CAKE IS A LIE! GLaDOS has been banned after people have disappeared after joining previous events organized by GLaDOS"
+                : null
+            }
+            tooltipOptions={{
+              position: "bottom",
+              mouseTrack: true,
+              mouseTrackTop: 15,
+              showOnDisabled: true,
+            }}
           >
             <div className="flex flex-column gap-4">
               <div className="flex gap-2 justify-content-center align-items-center">
@@ -94,6 +106,13 @@ export const Login = () => {
             label="Create a new one"
             onClick={() => setVisible(true)}
             disabled={true}
+            tooltip={"Adding accounts is disabled in Live Preview"}
+            tooltipOptions={{
+              position: "bottom",
+              mouseTrack: true,
+              mouseTrackTop: 15,
+              showOnDisabled: true,
+            }}
             outlined
           />
         </div>
