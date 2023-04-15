@@ -131,6 +131,11 @@ export const Home = () => {
                 Writing to the database has been disabled, so adding, deleting
                 and updating events and accounts has been disabled
               </li>
+              <li>
+                Cloud Firestore is protected with Firebase App Check. This makes
+                sure only this app is allowed to read (and write when enabled)
+                to the Cloud Firestore database.
+              </li>
             </ul>
           </p>
           <h1 className="p-card-title">The Assessment.</h1>
