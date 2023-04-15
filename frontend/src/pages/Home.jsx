@@ -50,7 +50,7 @@ export const Home = () => {
   let randomEvent = events[Math.floor(Math.random() * events.length)]; //pick random event from Events
 
   //prevent next Event being the same as featured event
-  if (randomEvent === nextEvent) {
+  if (randomEvent === nextEvent && events.length > 1) {
     while (randomEvent === nextEvent) {
       randomEvent = events[Math.floor(Math.random() * events.length)];
     }
