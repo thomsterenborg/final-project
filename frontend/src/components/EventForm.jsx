@@ -35,7 +35,6 @@ export const EventForm = ({
       .required("This field is required"),
     location: Yup.string()
       .min(2, "Location is too short")
-
       .max(100, "Location is too long")
       .required("Location is required"),
     startTime: Yup.date("Start time should be a valid date")
