@@ -6,7 +6,6 @@ import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
 import { redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { Dialog } from "primereact/dialog";
-import { deleteData, fetchData, updateData } from "../js/fetchers";
 import { EventForm } from "../components/EventForm";
 import { EventTitle } from "../components/ui/EventTitle";
 import { EventDescription } from "../components/ui/EventDescription";
@@ -23,6 +22,7 @@ import { classNames } from "primereact/utils";
 import {
   Timestamp,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -69,39 +69,48 @@ export const EventPage = () => {
 
   const toast = useRef(null);
 
+  //actions taken when users confirms deletion of event
   const accept = async () => {
-    const response = await deleteData(`events/${event.id}`);
-
-    if (response.ok) {
-      setTimeout(5000);
-      toast.current.show({
-        severity: "success",
-        summary: "Event deleted",
-        detail: "The event has succesfully been deleted",
-        life: 5000,
+    await deleteDoc(doc(db, "events", `${event.id}`))
+      .then(() => {
+        //show success message
+        toast.current.show({
+          severity: "success",
+          summary: "Event deleted",
+          detail:
+            "The event has successfully been deleted. We will redirect you to the Events page.",
+          life: 5000,
+        });
+        setTimeout(() => {
+          setVisible(false);
+          setSavingForm(false);
+          navigate(`/events`);
+        }, 3000);
+      })
+      .catch((error) => {
+        //show error message to user
+        toast.current.show({
+          severity: "error",
+          summary: "Event not updated",
+          detail: `Deleting events has been disabled in Live Preview: ${error})`,
+          life: 9000,
+        });
+        setVisible(false);
+        setSavingForm(false);
       });
-      setTimeout(() => navigate("/events"), 3000);
-    }
-
-    if (!response.ok) {
-      toast.current.show({
-        severity: "error",
-        summary: "Event not deleted",
-        detail: `Event could not be deleted. (${response.status} ${response.statusText})`,
-        life: 5000,
-      });
-    }
   };
 
+  //actions taken when users cancels deletion of event
   const reject = () => {
     toast.current.show({
-      severity: "error",
+      severity: "warn",
       summary: "Event not deleted",
-      detail: "Event has not been deleted",
-      life: 5000,
+      detail: "Deletion of event canceled by user",
+      life: 9000,
     });
   };
 
+  //Delete button popover
   const handleDelete = (e) => {
     confirmPopup({
       target: e.currentTarget,
@@ -113,6 +122,7 @@ export const EventPage = () => {
     });
   };
 
+  //Initial values for event edit form
   const initialValues = {
     createdBy: event.createdBy,
     title: event.title,
@@ -126,7 +136,6 @@ export const EventPage = () => {
 
   const submitForm = async (values) => {
     setSavingForm(true);
-    //const response = await updateData(`events/${event.id}`, values);
 
     const eventData = {
       createdBy: values.createdBy,
@@ -179,6 +188,12 @@ export const EventPage = () => {
             <div className="flex flex-column w-full">
               <div className="flex gap-1">
                 <Button
+                  icon="pi pi-arrow-left"
+                  rounded
+                  text
+                  onClick={() => navigate(-1)}
+                />
+                <Button
                   icon="pi pi-pencil"
                   rounded
                   text
@@ -191,15 +206,21 @@ export const EventPage = () => {
                   icon="pi pi-trash"
                   severity="danger"
                   onClick={handleDelete}
-                  disabled={true}
+                  disabled={!currentUser}
                   rounded
                   text
                 />
               </div>
-              <div className={classNames({ "p-hidden": false })}>
+              <div
+                className={classNames({
+                  "p-hidden": currentUser,
+                  "w-full": true,
+                  "mt-3": true,
+                })}
+              >
                 <Message
                   severity="warn"
-                  text="Deleting and editing events is disabled in Live Preview"
+                  text="Log in to edit or delete events"
                 />
               </div>
             </div>

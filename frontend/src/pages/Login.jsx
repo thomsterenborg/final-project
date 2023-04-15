@@ -9,7 +9,7 @@ import { UserForm } from "../components/UserForm";
 import { useRef, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../js/firebase";
 
 export const loader = async () => {
@@ -30,36 +30,41 @@ export const Login = () => {
 
   const submitForm = async (values) => {
     setSavingForm(true);
-    const response = await addData("users", values);
-    //const response = await fetch("https://httpstat.us/401");
 
-    const json = await response.json();
-    const newId = json.id;
+    const userData = {
+      name: values.name,
+      image: values.image,
+    };
 
-    if (!response.ok) {
-      toast.current.show({
-        severity: "error",
-        summary: "Account not created",
-        detail: "We could not create your account",
-        life: 3000,
-      });
+    try {
+      const response = await addDoc(collection(db, "users"), userData);
 
-      setTimeout(() => setVisible(false), 3000);
-      setSavingForm(false);
-    }
-
-    if (response.ok) {
+      const newId = response.id;
+      console.log(newId);
+      //show success message
       toast.current.show({
         severity: "success",
         summary: "Account created",
-        detail: "Your account has been created",
-        life: 3000,
+        detail: "Your account had been created",
+        life: 5000,
       });
 
+      //redirect to new event
       setTimeout(() => {
+        setVisible(false);
         setSavingForm(false);
-        navigate(`/user/${newId}`);
+        navigate(`/event/${newId}`);
       }, 3000);
+    } catch (error) {
+      //show error
+      toast.current.show({
+        severity: "error",
+        summary: "Account not created",
+        detail: `Creating accounts has been disabled in Live Preview. ${error}`,
+        life: 9000,
+      });
+      setVisible(false);
+      setSavingForm(false);
     }
   };
 
@@ -100,19 +105,11 @@ export const Login = () => {
             </div>
           </Button>
         ))}
-        <div className="flex flex-column justify-content-center">
+        <div className="flex flex-column justify-content-center align-items-center">
           <p>Is your account not listed?</p>
           <Button
             label="Create a new one"
             onClick={() => setVisible(true)}
-            disabled={true}
-            tooltip={"Adding accounts is disabled in Live Preview"}
-            tooltipOptions={{
-              position: "bottom",
-              mouseTrack: true,
-              mouseTrackTop: 15,
-              showOnDisabled: true,
-            }}
             outlined
           />
         </div>

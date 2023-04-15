@@ -44,7 +44,9 @@ export const EventForm = ({
       "startTime",
       (startTime, schema) =>
         startTime &&
-        schema.min(startTime, "End time should be later than Start time")
+        schema
+          .min(startTime, "End time should be later than Start time")
+          .required("End time is required")
     ),
   });
 

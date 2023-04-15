@@ -17,9 +17,6 @@ export const EventCardSkeleton = () => {
         <Skeleton width="12rem" className="mb-2"></Skeleton>
         <Skeleton width="4.5rem" height="1.5rem"></Skeleton>
       </div>
-      <div className="flex justify-content-end mt-6">
-        <Skeleton width="6rem" height="2rem"></Skeleton>
-      </div>
     </div>
   );
 };

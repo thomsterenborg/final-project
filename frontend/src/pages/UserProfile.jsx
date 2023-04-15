@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from "react";
 import { Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
-import { fetchData, updateData } from "../js/fetchers";
+import { updateData } from "../js/fetchers";
 import { useCurrentUser } from "../contexts/UserContext";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { DataView } from "primereact/dataview";
@@ -17,6 +17,7 @@ import {
   getDoc,
   getDocs,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { db } from "../js/firebase";
@@ -24,7 +25,8 @@ import { db } from "../js/firebase";
 export const loader = async ({ params }) => {
   //validate if signed in user and request profile are the same user
   const signedInUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (signedInUser.id != params.userId) return redirect("/login");
+  if (!signedInUser || signedInUser.id != params.userId)
+    return redirect("/login");
 
   const userDoc = await getDoc(doc(db, "users", `${params.userId}`));
   const user = { ...userDoc.data(), id: userDoc.id };
@@ -61,34 +63,39 @@ export const UserProfile = () => {
   const [savingForm, setSavingForm] = useState(false);
 
   const toast = useRef(null);
-  const navigate = useNavigate();
 
   const submitForm = async (values) => {
     setSavingForm(true);
-    const response = await updateData(`users/${user.id}`, values);
 
-    if (response.ok) {
-      toast.current.show({
-        severity: "success",
-        summary: "Profile updated",
-        detail: "Your profile has succesfully been updated",
-        life: 5000,
-      });
-      setVisible(false);
-      setSavingForm(false);
-      navigate(`/user/${user.id}`);
-    }
+    const userData = {
+      name: values.name,
+      image: values.image,
+    };
 
-    if (!response.ok) {
-      toast.current.show({
-        severity: "error",
-        summary: "Profile not updatet",
-        detail: `Your profile could not be updatet (${response.status} ${response.statusText})`,
-        life: 5000,
+    await setDoc(doc(db, "users", `${user.id}`), userData)
+      .then(() => {
+        //show success message
+        toast.current.show({
+          severity: "success",
+          summary: "Profile updated",
+          detail: "Your profile has successfully been updated",
+          life: 5000,
+        });
+        setVisible(false);
+        setSavingForm(false);
+      })
+      .catch((error) => {
+        //show error message to user
+        toast.current.show({
+          severity: "error",
+          summary: "Profile not updated",
+          detail: `Updating profiles has been disabled in Live Preview: ${error})`,
+          life: 9000,
+        });
+
+        setVisible(false);
+        setSavingForm(false);
       });
-      setVisible(false);
-      setSavingForm(false);
-    }
   };
 
   const handleSignOut = () => {
@@ -137,7 +144,7 @@ export const UserProfile = () => {
           your profile.
         </h1>
         <div className="flex flex-column md:flex-row gap-6 w-full">
-          <div className="p-card flex flex-column justify-content-center align-items-center p-4 w-full md:max-w-20rem h-26rem">
+          <div className="p-card flex flex-column justify-content-center align-items-center p-4 w-full md:max-w-20rem h-fit">
             <img
               src={user.image}
               alt="Profile picture"
@@ -148,14 +155,6 @@ export const UserProfile = () => {
               label="Edit profile"
               icon="pi pi-pencil"
               onClick={() => setVisible(true)}
-              disabled={true}
-              tooltip={"Adding events is disabled in Live Preview"}
-              tooltipOptions={{
-                position: "bottom",
-                mouseTrack: true,
-                mouseTrackTop: 15,
-                showOnDisabled: true,
-              }}
               outlined
             />
             <Button

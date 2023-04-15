@@ -76,17 +76,16 @@ export const EventList = ({ categories }) => {
           break;
       }
 
-      // if (search !== "")
-      //   conditions.push(
-      //     where("title", ">=", `${search}`),
-      //     where("title", "<=", `${search}` + "~")
-      //   );
-
-      if (selectedCategory !== null && selectedCategory !== undefined)
+      //Firebase only allows 1 array-contains query, so category will be skipped when searching
+      if (
+        selectedCategory !== null &&
+        selectedCategory !== undefined &&
+        search < 1
+      )
         conditions.push(
           where("categoryIds", "array-contains", `${selectedCategory.id}`)
         );
-      console.log(search);
+
       if (search.length > 0)
         conditions.push(where("keywords", "array-contains-any", search));
 

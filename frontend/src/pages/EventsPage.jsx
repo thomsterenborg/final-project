@@ -10,7 +10,13 @@ import { addData, fetchData } from "../js/fetchers";
 import { Toast } from "primereact/toast";
 import { useCurrentUser } from "../contexts/UserContext";
 import { EventFilters } from "../components/EventFilters";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../js/firebase";
 
 export const loader = async () => {
@@ -30,12 +36,12 @@ export const EventsPage = () => {
 
   const toast = useRef(null);
 
-  let userid = 0;
-  if (currentUser) userid = currentUser.id;
+  let userId = 0;
+  if (currentUser) userId = currentUser.id;
 
-  //intitial values for Add event form
+  //initial values for Add event form
   const initialValues = {
-    createdBy: userid,
+    createdBy: userId,
     title: "",
     description: "",
     image: "",
@@ -51,34 +57,51 @@ export const EventsPage = () => {
 
   const submitForm = async (values) => {
     setSavingForm(true);
-    const response = await addData("events", values);
 
-    const json = await response.json();
-    const newId = json.id;
+    const eventData = {
+      createdBy: values.createdBy,
+      title: values.title.toLocaleLowerCase(),
+      keywords: values.title.split(" "),
+      description: values.description,
+      image: values.image,
+      categoryIds: values.categoryIds,
+      location: values.location,
+      startTime: Timestamp.fromDate(new Date(values.startTime)),
+      endTime: Timestamp.fromDate(new Date(values.endTime)),
+    };
 
-    if (!response.ok) {
-      toast.current.show({
-        severity: "error",
-        summary: "Event not added",
-        detail: "Could not add event",
-        life: 3000,
-      });
-      setSavingForm(false);
-    }
+    try {
+      const response = await addDoc(collection(db, "events"), eventData);
 
-    if (response.ok) {
+      const newId = response.id;
+
+      //show success message
       toast.current.show({
         severity: "success",
-        summary: "Event added",
-        detail:
-          "The event has succesfuly been added. You will be redirect to your new event",
+        summary: "Event created",
+        detail: "The event has successfully been created",
         life: 3000,
       });
-      //timeout for toast
+
+      //redirect to new event
       setTimeout(() => {
+        setVisible(false);
         setSavingForm(false);
         navigate(`/event/${newId}`);
       }, 3000);
+    } catch (error) {
+      //show error
+      toast.current.show({
+        severity: "error",
+        summary: "Event not created",
+        detail: `Creating events has been disabled in Live Preview. ${error}`,
+        life: 5000,
+      });
+
+      setTimeout(() => {
+        setVisible(false);
+        setSavingForm(false);
+      }, 5000);
     }
   };
 

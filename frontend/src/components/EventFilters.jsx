@@ -142,15 +142,14 @@ export const EventFilters = ({ categories, onClick }) => {
             label="Filters & search"
             icon="pi pi-filter"
             onClick={(e) => mobileMenu.current.toggle(e)}
-            disabled={false}
             raised
           />
           <Button
             label="Add event"
             icon="pi pi-plus"
             onClick={() => onClick(true)}
-            disabled={true}
-            tooltip={"Adding events is disabled in Live Preview"}
+            disabled={!currentUser}
+            tooltip={!currentUser ? "Login to add new events" : null}
             tooltipOptions={{
               position: "bottom",
               mouseTrack: true,
