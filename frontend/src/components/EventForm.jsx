@@ -39,13 +39,15 @@ export const EventForm = ({
       .required("Location is required"),
     startTime: Yup.date("Start time should be a valid date")
       .min(new Date(), "Start time can not be in the past")
-      .required("Start time is requiered"),
-    endTime: Yup.date("Should be a valid date").when(
-      "startTime",
-      (startTime, schema) =>
-        startTime &&
-        schema.min(startTime, "End time should be later than Start time")
-    ),
+      .required("Start time is required"),
+    endTime: Yup.date("Should be a valid date")
+      .when(
+        "startTime",
+        (startTime, schema) =>
+          startTime &&
+          schema.min(startTime, "End time should be later than Start time")
+      )
+      .required("End time is required"),
   });
 
   return (
