@@ -61,7 +61,7 @@ export const Home = () => {
       <div className="flex flex-column align-items-center justify-content-center w-full h-full max-w-1200 px-3 lg:px-0">
         <div className="flex justify-content-start flex-column w-full">
           <h1 className="mt-4 mb-0 text-gray-600">Welcome to</h1>
-          <h1 className="text-6xl md:text-8xl text-gray-900 m-0">EVENTDASH.</h1>
+          <h1 className="text-6xl md:text-7xl text-gray-900 m-0">EVENTDASH.</h1>
         </div>
         <div className="flex gap-4 flex-column m-4 w-full">
           <Link className="no-underline" to={`/event/${randomEvent.id}`}>
