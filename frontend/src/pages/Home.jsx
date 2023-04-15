@@ -112,12 +112,15 @@ export const Home = () => {
                 Database is a Cloud Firestore database instead of JSON Server
               </li>
               <li className="mb-2">
-                Firestore does not support Full-text search without the use of
-                expensive third party applications. The search function on the
-                Events page does work, but is a bit limited. For example: If
-                your want to search the Ford Rally event, you can search fo,
-                ford, ford r, etc. as long as you start with the beginning of
-                the title of the event, but you can't search for "rally".
+                Firestore does not support Full-text so search works with
+                keywords. For example rally, ford, water, polo will all show
+                results. But you can't search for ral to get rally.
+              </li>
+              <li>
+                Because limitations in Cloud Firestore, selected categories in
+                filters on the Events page will be ignored when you use search.
+                Both keywords and categories are stored in an array and Firebase
+                only allows 1 array-contains element per query.
               </li>
               <li className="mb-2">
                 Pagination options are limited in Firestore. Because of this
