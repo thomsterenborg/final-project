@@ -116,7 +116,7 @@ export const Home = () => {
                 keywords. For example rally, ford, water, polo will all show
                 results. But you can't search for ral to get rally.
               </li>
-              <li>
+              <li className="mb-2">
                 Because limitations in Cloud Firestore, selected categories in
                 filters on the Events page will be ignored when you use search.
                 Both keywords and categories are stored in an array and Firebase
@@ -127,7 +127,7 @@ export const Home = () => {
                 limitation this version uses infinite scrolling in stead of the
                 "Paginator" used in the JSON Server version.
               </li>
-              <li>
+              <li className="mb-2">
                 Writing to the database has been disabled, so adding, deleting
                 and updating events and accounts has been disabled
               </li>
