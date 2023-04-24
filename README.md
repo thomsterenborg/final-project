@@ -4,6 +4,14 @@
             Front-end Development course. I will explain what the
             assessment was, what I did extra and what choices I made.
           </p>
+          <h1>How to run</h1>
+          <ul>
+          <li>Make sure you have node installed</li>
+         <li>Clone this repo</li>
+         <li>Run <code>npm install</code> in the project folder</li>
+         <li>Run "npm run dev" (or "npm run build", followed by "npm run preview")</li>
+         <li>Open localhost:5173 of localhost:4173 in your browser</li>
+          </ul>
           <h1>The Assessment.</h1>
           <p>
             I had to make an event dashboard. The theme was all up to me, but
