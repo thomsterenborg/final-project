@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { Navigation } from "./Navigation";
 import { UserContextProvider } from "../contexts/UserContext";
+import { Footer } from "./ui/Footer";
 
 export const Root = () => {
   return (
@@ -10,6 +11,7 @@ export const Root = () => {
         <Navigation />
         <Outlet />
       </UserContextProvider>
+      <Footer />
     </div>
   );
 };
