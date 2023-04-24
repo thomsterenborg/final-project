@@ -9,8 +9,8 @@
           <li>Make sure you have node installed</li>
          <li>Clone this repo</li>
          <li>Run <code>npm install</code> in the project folder</li>
-         <li>Run "npm run dev" (or "npm run build", followed by "npm run preview")</li>
-         <li>Open localhost:5173 of localhost:4173 in your browser</li>
+         <li>Run <code>npm run dev</code> (or <code>npm run build</code>, followed by <code>npm run preview</code>)</li>
+         <li>Open <code>localhost:5173</code> of <code>localhost:4173</code> in your browser</li>
           </ul>
           <h1>The Assessment.</h1>
           <p>
