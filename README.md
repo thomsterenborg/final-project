@@ -6,11 +6,11 @@
           </p>
           <h1>How to run</h1>
           <ul>
-          <li>Make sure you have node installed</li>
-         <li>Clone this repo</li>
-         <li>Run <code>npm install</code> in the project folder</li>
-         <li>Run <code>npm run dev</code> (or <code>npm run build</code>, followed by <code>npm run preview</code>)</li>
-         <li>Open <code>localhost:5173</code> of <code>localhost:4173</code> in your browser</li>
+          <li>Make sure you have node.js installed.</li>
+         <li>Clone this repo.</li>
+         <li>Run <code>npm install</code> in the project folder.</li>
+         <li>Run <code>npm run dev</code> (or <code>npm run build</code>, followed by <code>npm run preview</code>).</li>
+         <li>Open <code>localhost:5173</code> or <code>localhost:4173</code> in your browser.</li>
           </ul>
           <h1>The Assessment.</h1>
           <p>
